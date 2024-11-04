@@ -52,27 +52,23 @@ TIM_HandleTypeDef htim2;
 /**
  * Part 1
  */
+//// sample every 0.3 ms from an array of size 50
+// int index = 0;
 //// triangle
-//int triangle_wave_value = 0;
-//int triangle_wave_increment = -2;
-//uint32_t triangle_signal;
-//
+//uint16_t triangle_wave[50] = {0, 163, 327, 491, 655, 819, 982, 1146, 1310, 1474, 1638, 1801, 1965, 2129, 2293, 2457,
+//                              2620, 2784, 2948, 3112, 3276, 3439, 3603, 3767, 3931, 4095, 3931, 3767, 3603, 3439, 3276,
+//                              3112, 2948, 2784, 2620, 2457, 2293, 2129, 1965, 1801, 1638, 1474, 1310, 1146, 982, 819,
+//                              655, 491, 327, 163};
+//uint16_t triangle_signal;
 //// saw
-//int saw_wave_value = 0;
-//int saw_wave_increment = 1;
-//uint32_t saw_signal;
-//
+//uint16_t sawtooth_wave[50] = {0, 81, 163, 245, 327, 409, 491, 573, 655, 737, 819, 900, 982, 1064, 1146, 1228, 1310,
+//                              1392, 1474, 1556, 1638, 1719, 1801, 1883, 1965, 2047, 2129, 2211, 2293, 2375, 2457, 2538,
+//                              2620, 2702, 2784, 2866, 2948, 3030, 3112, 3194, 3276, 3357, 3439, 3521, 3603, 3685, 3767,
+//                              3849, 3931, 4013};
+//uint16_t saw_signal;
 //// sine
-//int sine_index = 0;
-//int sine_wave_increment = 1;
-//float32_t sine_wave_value;
-//uint32_t sine_signal;
-//
-//int saw_tri_samples_per_period = 8;
-//
-//// stay within 12-bit range (0-4095)
-//int saw_multiplier = 585;
-//int tri_multiplier = 512;
+//uint16_t sine_wave[50];
+//uint16_t sine_signal;
 
 
 
@@ -191,6 +187,17 @@ int main(void)
 
   HAL_DACEx_SelfCalibrate(&hdac1, &sConfig, DAC1_CHANNEL_1);
 
+//  /**
+//   * demo 1
+//   */
+//  // generate sine array of size 50
+//  float segment = 2 * PI / size;
+//  for (int i = 0; i < 50; i++) {
+//      float angle = i * segment;
+//      float sine_value = arm_sin_f32(angle);
+//      sine_wave[i] = (uint16_t)((sine_value + 1.0f) * (4095 / 2));
+//  }
+
 /**
  * Part 1 wave on DAC
  */
@@ -235,28 +242,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//    // inc triangle wave
-//    if (triangle_wave_value == saw_tri_samples_per_period || triangle_wave_value == 0) {
-//      triangle_wave_increment *= -1; // Flip increment when at max or min
-//    }
-//    triangle_wave_value += triangle_wave_increment;
-//
-//    // inc saw wave
-//    saw_wave_value += saw_wave_increment;
-//    saw_wave_value = saw_wave_value % saw_tri_samples_per_period;
-//
-//    // scale the signals for DAC output (max)
-//    triangle_signal = triangle_wave_value * tri_multiplier;
-//    saw_signal = saw_wave_value * saw_multiplier;
-//
-//    // calc sine wave
-//	float32_t angle = (2.0f * PI * sine_index) / saw_tri_samples_per_period;
-//	sine_wave_value = arm_sin_f32(angle);
-//	sine_signal = (uint32_t)((sine_wave_value + 1.0f) / 2.0f * 4095); //can multiply to *0.8, improve quality
-//	sine_index = (sine_index + sine_wave_increment) % saw_tri_samples_per_period;
-//	// get values from array
-//
-//
+
+//    // get values from arrays
+//    saw_signal = saw_wave[index];
+//    triangle_signal = triangle_wave[index];
+//    sine_signal = sine_wave[index];
+//    index = index + 1;
 //    // out the signals to the DAC
 ////    HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, triangle_signal);
 //    HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, saw_signal);
@@ -264,7 +255,7 @@ int main(void)
 ////    HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, sine_signal);
 //
 //    // freq
-//    HAL_Delay(1);
+//    HAL_Delay(0.3);
 
   }
   /* USER CODE END 3 */
