@@ -191,11 +191,11 @@ int main(void)
 //   * demo 1
 //   */
 //  // generate sine array of size 50
-//  float segment = 2 * PI / size;
+//  float segment = 2 * PI / 50;
 //  for (int i = 0; i < 50; i++) {
 //      float angle = i * segment;
 //      float sine_value = arm_sin_f32(angle);
-//      sine_wave[i] = (uint16_t)((sine_value + 1.0f) * (4095 / 2));
+//      sine_wave[i] = (uint16_t)((sine_value + 1.0f)*(4094/2));
 //  }
 
 /**
